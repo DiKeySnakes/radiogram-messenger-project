@@ -7,31 +7,31 @@ import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 
 import Input from '@/app/components/inputs/Input';
-import AuthSocialButton from './AuthSocialButton';
+import AuthProviderButton from './AuthProviderButton';
 import Button from '@/app/components/Button';
 import { toast } from 'react-hot-toast';
 
-type Variant = 'LOGIN' | 'REGISTER';
+type Action = 'LOGIN' | 'SIGNUP';
 
 const AuthForm = () => {
   const session = useSession();
   const router = useRouter();
-  const [variant, setVariant] = useState<Variant>('LOGIN');
+  const [action, setAction] = useState<Action>('LOGIN');
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (session?.status === 'authenticated') {
-      router.push('/conversations');
+      router.push('/chats');
     }
   }, [session?.status, router]);
 
-  const toggleVariant = useCallback(() => {
-    if (variant === 'LOGIN') {
-      setVariant('REGISTER');
+  const toggleAction = useCallback(() => {
+    if (action === 'LOGIN') {
+      setAction('SIGNUP');
     } else {
-      setVariant('LOGIN');
+      setAction('LOGIN');
     }
-  }, [variant]);
+  }, [action]);
 
   const {
     register,
@@ -49,8 +49,8 @@ const AuthForm = () => {
     setIsLoading(true);
 
     try {
-      if (variant === 'REGISTER') {
-        await fetch('/api/register', {
+      if (action === 'SIGNUP') {
+        await fetch('/api/signup', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -74,7 +74,7 @@ const AuthForm = () => {
         throw new Error('Invalid credentials!');
       }
 
-      router.push('/conversations');
+      router.push('/chats');
     } catch (error) {
       toast.error('Something went wrong!');
     } finally {
@@ -82,17 +82,21 @@ const AuthForm = () => {
     }
   };
 
-  const socialAction = (action: string) => {
+  const authProvider = (provider: string) => {
     setIsLoading(true);
 
-    signIn(action, { redirect: false })
+    signIn(provider, { redirect: false })
       .then((callback) => {
         if (callback?.error) {
           toast.error('Invalid credentials!');
         }
 
+        if (callback?.ok && !callback?.error) {
+          toast.success('Logged in!');
+        }
+
         if (callback?.ok) {
-          router.push('/conversations');
+          router.push('/chats');
         }
       })
       .finally(() => setIsLoading(false));
@@ -110,7 +114,7 @@ const AuthForm = () => {
           sm:px-10
         '>
         <form className='space-y-6' onSubmit={handleSubmit(onSubmit)}>
-          {variant === 'REGISTER' && (
+          {action === 'SIGNUP' && (
             <Input
               disabled={isLoading}
               register={register}
@@ -140,7 +144,7 @@ const AuthForm = () => {
           />
           <div>
             <Button disabled={isLoading} fullWidth type='submit'>
-              {variant === 'LOGIN' ? 'Sign in' : 'Register'}
+              {action === 'LOGIN' ? 'Sign In' : 'Sign Up'}
             </Button>
           </div>
         </form>
@@ -164,13 +168,13 @@ const AuthForm = () => {
           </div>
 
           <div className='mt-6 flex gap-2'>
-            <AuthSocialButton
+            <AuthProviderButton
               icon={BsGithub}
-              onClick={() => socialAction('github')}
+              onClick={() => authProvider('github')}
             />
-            <AuthSocialButton
+            <AuthProviderButton
               icon={BsGoogle}
-              onClick={() => socialAction('google')}
+              onClick={() => authProvider('google')}
             />
           </div>
         </div>
@@ -185,12 +189,12 @@ const AuthForm = () => {
             text-gray-500
           '>
           <div>
-            {variant === 'LOGIN'
+            {action === 'LOGIN'
               ? 'New to Messenger?'
               : 'Already have an account?'}
           </div>
-          <div onClick={toggleVariant} className='underline cursor-pointer'>
-            {variant === 'LOGIN' ? 'Create an account' : 'Login'}
+          <div onClick={toggleAction} className='underline cursor-pointer'>
+            {action === 'LOGIN' ? 'Create an account' : 'Login'}
           </div>
         </div>
       </div>
