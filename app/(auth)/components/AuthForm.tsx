@@ -1,5 +1,6 @@
 'use client';
 
+import axios from 'axios';
 import { signIn, useSession } from 'next-auth/react';
 import { useCallback, useEffect, useState } from 'react';
 import { BsGithub, BsGoogle } from 'react-icons/bs';
@@ -45,40 +46,46 @@ const AuthForm = () => {
     },
   });
 
-  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+  const onSubmit: SubmitHandler<FieldValues> = (data) => {
     setIsLoading(true);
 
-    try {
-      if (action === 'SIGNUP') {
-        await fetch('/api/signup', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
-        });
-      }
+    if (action === 'SIGNUP') {
+      axios
+        .post('/api/signup', data)
+        .then(() =>
+          signIn('credentials', {
+            ...data,
+            redirect: false,
+          })
+        )
+        .then((callback) => {
+          if (callback?.error) {
+            toast.error('Invalid credentials!');
+          }
 
-      const response = await fetch('/api/signin', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...data,
-          redirect: false,
-        }),
-      });
+          if (callback?.ok) {
+            router.push('chats');
+          }
+        })
+        .catch(() => toast.error('Something went wrong!'))
+        .finally(() => setIsLoading(false));
+    }
 
-      if (!response.ok) {
-        throw new Error('Invalid credentials!');
-      }
+    if (action === 'LOGIN') {
+      signIn('credentials', {
+        ...data,
+        redirect: false,
+      })
+        .then((callback) => {
+          if (callback?.error) {
+            toast.error('Invalid credentials!');
+          }
 
-      router.push('/chats');
-    } catch (error) {
-      toast.error('Something went wrong!');
-    } finally {
-      setIsLoading(false);
+          if (callback?.ok) {
+            router.push('/chats');
+          }
+        })
+        .finally(() => setIsLoading(false));
     }
   };
 
