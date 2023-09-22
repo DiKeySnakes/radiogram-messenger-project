@@ -5,20 +5,23 @@ const getCurrentUser = async () => {
   try {
     const session = await getSession();
 
-    if (!session) {
-      throw new Error('Invalid session');
+    if (!session?.user?.email) {
+      return null;
     }
 
     const currentUser = await prisma.user.findUnique({
       where: {
-        email: session.user?.email as string,
+        email: session.user.email as string,
       },
     });
 
-    return currentUser || null;
+    if (!currentUser) {
+      return null;
+    }
+
+    return currentUser;
   } catch (error: any) {
-    console.error('Error getting current user:', error);
-    throw new Error(`Failed to get current user: ${error.message}`);
+    return null;
   }
 };
 
