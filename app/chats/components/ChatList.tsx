@@ -96,6 +96,7 @@ const ChatList: React.FC<ChatListProps> = ({ initialItems, users }) => {
         overflow-y-auto
         border-r
         border-gray-200
+        bg-white
       `,
           isOpen ? 'hidden' : 'block w-full left-0'
         )}>
