@@ -1,7 +1,8 @@
 'use client';
 
+import axios from 'axios';
 import { signIn, useSession } from 'next-auth/react';
-import { useReducer, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { BsGithub, BsGoogle } from 'react-icons/bs';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
@@ -11,41 +12,27 @@ import AuthProviderButton from './AuthProviderButton';
 import Button from '@/app/components/Button';
 import { toast } from 'react-hot-toast';
 
-type AuthAction = 'LOGIN' | 'SIGNUP';
-
-const initialState = { isLoading: false };
-
-type State = {
-  isLoading: boolean;
-};
-
-type Action = {
-  type: 'SET_LOADING';
-  payload: boolean;
-};
-
-const reducer = (state: State, action: Action) => {
-  switch (action.type) {
-    case 'SET_LOADING':
-      return { ...state, isLoading: action.payload };
-    default:
-      return state;
-  }
-};
+type Action = 'LOGIN' | 'SIGNUP';
 
 const AuthForm = () => {
   const session = useSession();
   const router = useRouter();
-  const [action, setAction] = useState<AuthAction>('LOGIN');
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [action, setAction] = useState<Action>('LOGIN');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const toggleAction = () => {
+  useEffect(() => {
+    if (session?.status === 'authenticated') {
+      router.push('/chats');
+    }
+  }, [session?.status, router]);
+
+  const toggleAction = useCallback(() => {
     if (action === 'LOGIN') {
       setAction('SIGNUP');
     } else {
       setAction('LOGIN');
     }
-  };
+  }, [action]);
 
   const {
     register,
@@ -60,47 +47,51 @@ const AuthForm = () => {
   });
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    dispatch({ type: 'SET_LOADING', payload: true });
-
-    const signInCallback = (callback: any) => {
-      if (callback?.error) {
-        toast.error('Invalid credentials!');
-      }
-
-      if (callback?.ok) {
-        router.push('/chats');
-      }
-    };
+    setIsLoading(true);
 
     if (action === 'SIGNUP') {
-      fetch('/api/signup', {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error('Invalid credentials!');
+      axios
+        .post('/api/signup', data)
+        .then(() =>
+          signIn('credentials', {
+            ...data,
+            redirect: false,
+          })
+        )
+        .then((callback) => {
+          if (callback?.error) {
+            toast.error('Invalid credentials!');
           }
-          return response.json();
+
+          if (callback?.ok) {
+            toast.success('Logged in!');
+            router.push('/chats');
+          }
         })
-        .then(() => signIn('credentials', { ...data, redirect: false }))
-        .then(signInCallback)
         .catch(() => toast.error('Something went wrong!'))
-        .finally(() => dispatch({ type: 'SET_LOADING', payload: false }));
+        .finally(() => setIsLoading(false));
     }
 
     if (action === 'LOGIN') {
-      signIn('credentials', { ...data, redirect: false })
-        .then(signInCallback)
-        .finally(() => dispatch({ type: 'SET_LOADING', payload: false }));
+      signIn('credentials', {
+        ...data,
+        redirect: false,
+      })
+        .then((callback) => {
+          if (callback?.error) {
+            toast.error('Invalid credentials!');
+          }
+
+          if (callback?.ok) {
+            router.push('/chats');
+          }
+        })
+        .finally(() => setIsLoading(false));
     }
   };
 
   const authProvider = (provider: string) => {
-    dispatch({ type: 'SET_LOADING', payload: true });
+    setIsLoading(true);
 
     signIn(provider, { redirect: false })
       .then((callback) => {
@@ -108,22 +99,13 @@ const AuthForm = () => {
           toast.error('Invalid credentials!');
         }
 
-        if (callback?.ok && !callback?.error) {
-          toast.success('Logged in!');
-        }
-
         if (callback?.ok) {
+          toast.success('Logged in!');
           router.push('/chats');
         }
       })
-      .finally(() => dispatch({ type: 'SET_LOADING', payload: false }));
+      .finally(() => setIsLoading(false));
   };
-
-  useEffect(() => {
-    if (!state.isLoading && session?.status === 'authenticated') {
-      router.push('/chats');
-    }
-  }, [state.isLoading, session?.status, router]);
 
   return (
     <div className='mt-8 sm:mx-auto sm:w-full sm:max-w-md'>
@@ -139,7 +121,7 @@ const AuthForm = () => {
         <form className='space-y-6' onSubmit={handleSubmit(onSubmit)}>
           {action === 'SIGNUP' && (
             <Input
-              disabled={state.isLoading}
+              disabled={isLoading}
               register={register}
               errors={errors}
               required
@@ -148,7 +130,7 @@ const AuthForm = () => {
             />
           )}
           <Input
-            disabled={state.isLoading}
+            disabled={isLoading}
             register={register}
             errors={errors}
             required
@@ -157,7 +139,7 @@ const AuthForm = () => {
             type='email'
           />
           <Input
-            disabled={state.isLoading}
+            disabled={isLoading}
             register={register}
             errors={errors}
             required
@@ -166,7 +148,7 @@ const AuthForm = () => {
             type='password'
           />
           <div>
-            <Button disabled={state.isLoading} fullWidth type='submit'>
+            <Button disabled={isLoading} fullWidth type='submit'>
               {action === 'LOGIN' ? 'Sign In' : 'Sign Up'}
             </Button>
           </div>

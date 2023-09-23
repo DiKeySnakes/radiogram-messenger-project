@@ -61,7 +61,7 @@ export async function POST(request: Request, { params }: { params: IParams }) {
       },
     });
 
-    // Update all connections with new read status
+    // Update all connections with new seen
     await pusherServer.trigger(currentUser.email, 'chat:update', {
       id: chatId,
       messages: [updatedMessage],
