@@ -2,28 +2,27 @@ import prisma from '@/app/libs/prismadb';
 import getCurrentUser from './getCurrentUser';
 
 const getChatById = async (chatId: string) => {
-  const currentUser = await getCurrentUser();
+  try {
+    const currentUser = await getCurrentUser();
 
-  if (!currentUser) {
-    throw new Error('Current user not found');
-  }
+    if (!currentUser?.email) {
+      return null;
+    }
 
-  const chat = await prisma.chat.findUnique({
-    where: {
-      id: chatId,
-      users: {
-        some: {
-          id: currentUser.id,
-        },
+    const chat = await prisma.chat.findUnique({
+      where: {
+        id: chatId,
       },
-    },
-  });
+      include: {
+        users: true,
+      },
+    });
 
-  if (!chat) {
-    throw new Error('Chat not found');
+    return chat;
+  } catch (error: any) {
+    console.log('SERVER_ERROR:', error);
+    return null;
   }
-
-  return chat;
 };
 
 export default getChatById;
