@@ -78,7 +78,7 @@ const MessageBox: React.FC<MessageBoxProps> = ({ data, isLast }) => {
             font-light
             text-gray-500
             '>
-            {`Seen by ${readList}`}
+            {`Read by ${readList}`}
           </div>
         )}
       </div>

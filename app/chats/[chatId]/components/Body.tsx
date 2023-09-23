@@ -20,7 +20,7 @@ const Body: React.FC<BodyProps> = ({ initialMessages = [] }) => {
   const { chatId } = useChat();
 
   useEffect(() => {
-    axios.post(`/api/conversations/${chatId}/seen`);
+    axios.post(`/api/chats/${chatId}/read`);
   }, [chatId]);
 
   useEffect(() => {
