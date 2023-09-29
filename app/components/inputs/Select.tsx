@@ -2,7 +2,8 @@
 
 import ReactSelect from 'react-select';
 
-interface SelectProps {
+interface ISelectProps {
+  id: string;
   label: string;
   value?: Record<string, any>;
   onChange: (value: Record<string, any>) => void;
@@ -10,7 +11,8 @@ interface SelectProps {
   disabled?: boolean;
 }
 
-const Select: React.FC<SelectProps> = ({
+const Select: React.FC<ISelectProps> = ({
+  id,
   label,
   value,
   onChange,
@@ -18,31 +20,18 @@ const Select: React.FC<SelectProps> = ({
   disabled,
 }) => {
   return (
-    <div className='z-[100]'>
-      <label
-        className='
-          block
-          text-sm
-          font-medium
-          leading-6
-          text-gray-900
-        '>
-        {label}
-      </label>
+    <div className='form-control w-full'>
+      <div className='label'>
+        <span className='label-text'>{label}</span>
+      </div>
       <div className='mt-2'>
         <ReactSelect
+          instanceId={id}
           isDisabled={disabled}
           value={value}
           onChange={onChange}
           isMulti
           options={options}
-          menuPortalTarget={document.body}
-          styles={{
-            menuPortal: (base) => ({ ...base, zIndex: 9999 }),
-          }}
-          classNames={{
-            control: () => 'text-sm',
-          }}
         />
       </div>
     </div>

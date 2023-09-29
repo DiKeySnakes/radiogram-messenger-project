@@ -2,7 +2,7 @@
 
 import { FieldErrors, FieldValues, UseFormRegister } from 'react-hook-form';
 
-interface MessageInputProps {
+interface IMessageInputProps {
   placeholder?: string;
   id: string;
   type?: string;
@@ -11,7 +11,7 @@ interface MessageInputProps {
   errors: FieldErrors;
 }
 
-const MessageInput: React.FC<MessageInputProps> = ({
+const MessageInput: React.FC<IMessageInputProps> = ({
   placeholder,
   id,
   type,
@@ -23,18 +23,16 @@ const MessageInput: React.FC<MessageInputProps> = ({
       <input
         id={id}
         type={type}
-        autoComplete={id}
+        autoComplete='on'
         {...register(id, { required })}
         placeholder={placeholder}
         className='
-          text-black
-          font-light
-          py-2
-          px-4
-          bg-neutral-100
-          w-full
-          rounded-full
-          focus:outline-none
+        input
+        input-bordered
+        rounded-full
+        w-full
+        font-light
+        focus:outline-none
         '
       />
     </div>

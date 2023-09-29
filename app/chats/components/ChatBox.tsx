@@ -11,12 +11,12 @@ import useChatCompanion from '@/app/hooks/useChatCompanion';
 import AvatarGroup from '@/app/components/AvatarGroup';
 import { FullChatType } from '@/app/types';
 
-interface ChatBoxProps {
+interface IChatBoxProps {
   data: FullChatType;
   selected?: boolean;
 }
 
-const ChatBox: React.FC<ChatBoxProps> = ({ data, selected }) => {
+const ChatBox: React.FC<IChatBoxProps> = ({ data, selected }) => {
   const chatCompanion = useChatCompanion(data);
   const session = useSession();
   const router = useRouter();
@@ -73,12 +73,12 @@ const ChatBox: React.FC<ChatBoxProps> = ({ data, selected }) => {
         items-center
         space-x-3
         p-3
-        hover:bg-neutral-100
+        hover:bg-neutral
         rounded-lg
         transition
         cursor-pointer
         `,
-        selected ? 'bg-neutral-100' : 'bg-white'
+        selected ? 'bg-base-100' : 'bg-base-200'
       )}>
       {data.isGroup ? (
         <AvatarGroup users={data.users} />
@@ -89,27 +89,19 @@ const ChatBox: React.FC<ChatBoxProps> = ({ data, selected }) => {
         <div className='focus:outline-none'>
           <span className='absolute inset-0' aria-hidden='true' />
           <div className='flex justify-between items-center mb-1'>
-            <p className='text-md font-medium text-gray-900'>
+            <p className='text-md font-medium'>
               {data.name || chatCompanion.name}
             </p>
             {lastMessage?.createdAt && (
-              <p
-                className='
-                  text-xs
-                  text-gray-400
-                  font-light
-                '>
+              <p className='text-xs font-light'>
                 {format(new Date(lastMessage.createdAt), 'p')}
               </p>
             )}
           </div>
           <p
             className={clsx(
-              `
-              truncate
-              text-sm
-              `,
-              hasRead ? 'text-gray-500' : 'text-black font-medium'
+              'truncate text-sm',
+              hasRead ? 'text-success' : 'text-info'
             )}>
             {lastMessageText}
           </p>

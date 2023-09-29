@@ -4,13 +4,12 @@ import { useRouter } from 'next/navigation';
 import { User } from '@prisma/client';
 
 import Avatar from '@/app/components/Avatar';
-import LoadingModal from '@/app/components/modals/LoadingModal';
 
-interface UserBoxProps {
+interface IUserBoxProps {
   data: User;
 }
 
-const UserBox: React.FC<UserBoxProps> = ({ data }) => {
+const UserBox: React.FC<IUserBoxProps> = ({ data }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -27,7 +26,6 @@ const UserBox: React.FC<UserBoxProps> = ({ data }) => {
 
   return (
     <>
-      {isLoading && <LoadingModal />}
       <div
         onClick={handleClick}
         className='
@@ -36,9 +34,8 @@ const UserBox: React.FC<UserBoxProps> = ({ data }) => {
           flex
           items-center
           space-x-3
-          bg-white
           p-3
-          hover:bg-neutral-100
+          hover:bg-neutral
           rounded-lg
           transition
           cursor-pointer
@@ -48,7 +45,7 @@ const UserBox: React.FC<UserBoxProps> = ({ data }) => {
           <div className='focus:outline-none'>
             <span className='absolute inset-0' aria-hidden='true' />
             <div className='flex justify-between items-center mb-1'>
-              <p className='text-sm font-medium text-gray-900'>{data.name}</p>
+              <p className='text-sm font-medium'>{data.name}</p>
             </div>
           </div>
         </div>

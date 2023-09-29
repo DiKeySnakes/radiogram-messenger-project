@@ -2,6 +2,39 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .navbarVertical {
+    @apply hidden
+   lg:fixed
+   lg:inset-y-0
+   lg:left-0
+   lg:z-40
+   lg:w-20
+   lg:py-4
+   lg:flex
+   lg:flex-col
+   justify-between
+   bg-base-200
+   border-r
+   border-neutral;
+  }
+  .navbarHorizontal {
+    @apply h-20
+    fixed
+    lg:hidden
+    justify-between
+    w-full
+    bottom-0
+    z-40
+    flex
+    items-center
+    px-4
+    bg-base-200
+    border-t
+    border-neutral;
+  }
+}
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;

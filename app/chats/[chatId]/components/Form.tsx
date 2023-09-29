@@ -41,8 +41,8 @@ const Form = () => {
       className='
         py-4
         px-4
-        bg-white
         border-t
+        border-neutral
         flex
         items-center
         gap-2
@@ -52,8 +52,9 @@ const Form = () => {
       <CldUploadButton
         options={{ maxFiles: 1 }}
         onUpload={handleUpload}
-        uploadPreset='vzgepkpj'>
-        <HiPhoto size={30} className='text-sky-500' />
+        uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_PRESET}
+        className='btn btn-circle btn-ghost border-neutral'>
+        <HiPhoto size={30} />
       </CldUploadButton>
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -67,15 +68,8 @@ const Form = () => {
         />
         <button
           type='submit'
-          className='
-            rounded-full
-            p-2
-            bg-sky-500
-            cursor-pointer
-            hover:bg-sky-600
-            transition
-          '>
-          <HiPaperAirplane size={18} className='text-white' />
+          className='btn btn-circle btn-ghost border-neutral'>
+          <HiPaperAirplane size={24} />
         </button>
       </form>
     </div>

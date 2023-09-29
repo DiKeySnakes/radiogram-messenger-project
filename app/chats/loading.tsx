@@ -1,7 +1,5 @@
-import LoadingModal from '../components/modals/LoadingModal';
-
-const Loading = () => {
-  return <LoadingModal />;
-};
-
-export default Loading;
+import LoadingPage from '../components/LoadingPage';
+export default function Loading() {
+  // You can add any UI inside Loading, including a Skeleton.
+  return <LoadingPage />;
+}

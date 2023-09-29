@@ -9,11 +9,11 @@ import MessageBox from './MessageBox';
 import { FullMessageType } from '@/app/types';
 import { find } from 'lodash';
 
-interface BodyProps {
+interface IBodyProps {
   initialMessages: FullMessageType[];
 }
 
-const Body: React.FC<BodyProps> = ({ initialMessages = [] }) => {
+const Body: React.FC<IBodyProps> = ({ initialMessages = [] }) => {
   const bottomRef = useRef<HTMLDivElement>(null);
   const [messages, setMessages] = useState(initialMessages);
 

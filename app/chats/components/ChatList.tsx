@@ -4,7 +4,7 @@ import { User } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { useEffect, useMemo, useState } from 'react';
-import { MdOutlineGroupAdd } from 'react-icons/md';
+import { HiUserGroup } from 'react-icons/hi2';
 import clsx from 'clsx';
 import { find, uniq } from 'lodash';
 
@@ -14,20 +14,20 @@ import GroupChatModal from '@/app/components/modals/GroupChatModal';
 import ChatBox from '@/app/chats/components/ChatBox';
 import { FullChatType } from '@/app/types';
 
-interface ChatListProps {
+interface IChatListProps {
   initialItems: FullChatType[];
   users: User[];
   title?: string;
 }
 
-const ChatList: React.FC<ChatListProps> = ({ initialItems, users }) => {
+const ChatList: React.FC<IChatListProps> = ({ initialItems, users }) => {
   const [items, setItems] = useState(initialItems);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const router = useRouter();
   const session = useSession();
 
-  const { chatId, isOpen } = useChat();
+  const { chatId, chatIsActive } = useChat();
 
   const pusherKey = useMemo(() => {
     return session.data?.user?.email;
@@ -78,44 +78,35 @@ const ChatList: React.FC<ChatListProps> = ({ initialItems, users }) => {
 
   return (
     <>
-      <GroupChatModal
-        users={users}
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      />
+      <GroupChatModal users={users} />
       <aside
         className={clsx(
           `
-        fixed
-        inset-y-0
-        pb-20
-        lg:pb-0
-        lg:left-20
-        lg:w-80
-        lg:block
-        overflow-y-auto
-        border-r
-        border-gray-200
-        bg-white
-      `,
-          isOpen ? 'hidden' : 'block w-full left-0'
+          fixed
+          inset-y-0
+          pb-20
+          lg:pb-0
+          lg:left-20
+          lg:w-80
+          lg:block
+          overflow-y-auto
+          border-r
+          border-neutral
+          `,
+          chatIsActive ? 'hidden' : 'block w-full left-0'
         )}>
         <div className='px-5'>
-          <div className='flex justify-between mb-4 pt-4'>
-            <div className='text-2xl font-bold text-neutral-800'>Messages</div>
-            <div
-              onClick={() => setIsModalOpen(true)}
-              className='
-                rounded-full
-                p-2
-                bg-gray-100
-                text-gray-600
-                cursor-pointer
-                hover:opacity-75
-                transition
-              '>
-              <MdOutlineGroupAdd size={20} />
-            </div>
+          <div className='flex justify-between items-center mb-4 pt-4'>
+            <div className='text-3xl font-bold'>Chats</div>
+            <button
+              className='btn btn-circle btn-ghost border-neutral'
+              onClick={() =>
+                (
+                  document.getElementById('group_chat_modal') as HTMLFormElement
+                ).showModal()
+              }>
+              <HiUserGroup size={32} />
+            </button>
           </div>
           {items.map((item) => (
             <ChatBox key={item.id} data={item} selected={chatId === item.id} />

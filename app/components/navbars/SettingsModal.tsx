@@ -9,21 +9,14 @@ import { CldUploadButton } from 'next-cloudinary';
 
 import Input from '../inputs/Input';
 import Modal from '../modals/Modal';
-import Button from '../Button';
 import Image from 'next/image';
 import { toast } from 'react-hot-toast';
 
-interface SettingsModalProps {
-  isOpen?: boolean;
-  onClose: () => void;
+interface ISettingsModalProps {
   currentUser: User;
 }
 
-const SettingsModal: React.FC<SettingsModalProps> = ({
-  isOpen,
-  onClose,
-  currentUser = {},
-}) => {
+const SettingsModal: React.FC<ISettingsModalProps> = ({ currentUser }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -50,6 +43,10 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
     });
   };
 
+  const closeModal = () => {
+    (document.getElementById('settings_modal') as HTMLFormElement).close();
+  };
+
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     setIsLoading(true);
 
@@ -57,27 +54,19 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
       .post('/api/settings', data)
       .then(() => {
         router.refresh();
-        onClose();
+        closeModal();
       })
       .catch(() => toast.error('Something went wrong!'))
       .finally(() => setIsLoading(false));
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal id='settings_modal'>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className='space-y-12'>
-          <div className='border-b border-gray-900/10 pb-12'>
-            <h2
-              className='
-                text-base
-                font-semibold
-                leading-7
-                text-gray-900
-              '>
-              Profile
-            </h2>
-            <p className='mt-1 text-sm leading-6 text-gray-600'>
+          <div className='border-b border-neutral pb-12'>
+            <h1 className='text-2xl text-warning'>Profile</h1>
+            <p className='mt-1 text-sm leading-6'>
               Edit your public information.
             </p>
 
@@ -91,55 +80,49 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
                 register={register}
               />
               <div>
-                <label
-                  htmlFor='photo'
-                  className='
-                    block
-                    text-sm
-                    font-medium
-                    leading-6
-                    text-gray-900
-                  '>
+                <span className='block text-sm font-medium leading-6'>
                   Photo
-                </label>
+                </span>
                 <div className='mt-2 flex items-center gap-x-3'>
                   <Image
                     width='48'
                     height='48'
-                    className='rounded-full'
+                    className='rounded-full w-12 h-12'
                     src={
                       image || currentUser?.image || '/images/placeholder.jpg'
                     }
                     alt='Avatar'
                   />
-                  <CldUploadButton
-                    options={{ maxFiles: 1 }}
-                    onUpload={handleUpload}
-                    uploadPreset='pgc9ehd5'>
-                    {/* <Button disabled={isLoading} secondary type='button'> */}
-                    Change
-                    {/* </Button> */}
-                  </CldUploadButton>
+                  <div onClick={closeModal}>
+                    <CldUploadButton
+                      options={{ maxFiles: 1 }}
+                      onUpload={handleUpload}
+                      uploadPreset={
+                        process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_PRESET
+                      }
+                      className='btn btn-outline btn-warning'>
+                      Change
+                    </CldUploadButton>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div
-          className='
-            mt-6
-            flex
-            items-center
-            justify-end
-            gap-x-6
-          '>
-          <Button disabled={isLoading} secondary onClick={onClose}>
+        <div className='mt-6 flex items-center justify-end gap-x-6'>
+          <button
+            onClick={closeModal}
+            disabled={isLoading}
+            className='btn btn-outline btn-error'>
             Cancel
-          </Button>
-          <Button disabled={isLoading} type='submit'>
+          </button>
+          <button
+            type='submit'
+            disabled={isLoading}
+            className='btn btn-outline btn-info'>
             Save
-          </Button>
+          </button>
         </div>
       </form>
     </Modal>

@@ -2,7 +2,7 @@
 
 import { HiChevronLeft } from 'react-icons/hi';
 import { HiEllipsisHorizontal } from 'react-icons/hi2';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import Link from 'next/link';
 import { Chat, User } from '@prisma/client';
 
@@ -13,15 +13,14 @@ import Avatar from '@/app/components/Avatar';
 import AvatarGroup from '@/app/components/AvatarGroup';
 import ProfileDrawer from './ProfileDrawer';
 
-interface HeaderProps {
+interface IHeaderProps {
   chat: Chat & {
     users: User[];
   };
 }
 
-const Header: React.FC<HeaderProps> = ({ chat }) => {
+const Header: React.FC<IHeaderProps> = ({ chat }) => {
   const chatCompanion = useChatCompanion(chat);
-  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const { members } = useActiveList();
   const isActive = members.indexOf(chatCompanion?.email!) !== -1;
@@ -35,37 +34,13 @@ const Header: React.FC<HeaderProps> = ({ chat }) => {
 
   return (
     <>
-      <ProfileDrawer
-        data={chat}
-        isOpen={drawerOpen}
-        onClose={() => setDrawerOpen(false)}
-      />
-      <div
-        className='
-        bg-white
-        w-full
-        flex
-        border-b-[1px]
-        sm:px-4
-        py-3
-        px-4
-        lg:px-6
-        justify-between
-        items-center
-        shadow-sm
-      '>
+      <ProfileDrawer data={chat} />
+      <div className='navbar bg-base-200 justify-between border-b border-neutral shadow-sm'>
         <div className='flex gap-3 items-center'>
-          <Link
-            href='/conversations'
-            className='
-            lg:hidden
-            block
-            text-sky-500
-            hover:text-sky-600
-            transition
-            cursor-pointer
-          '>
-            <HiChevronLeft size={32} />
+          <Link href='/chats' className='lg:hidden block'>
+            <button className='btn btn-circle btn-ghost'>
+              <HiChevronLeft size={32} />
+            </button>
           </Link>
           {chat.isGroup ? (
             <AvatarGroup users={chat.users} />
@@ -74,21 +49,14 @@ const Header: React.FC<HeaderProps> = ({ chat }) => {
           )}
           <div className='flex flex-col'>
             <div>{chat.name || chatCompanion.name}</div>
-            <div className='text-sm font-light text-neutral-500'>
-              {statusText}
-            </div>
+            <div className='text-sm font-light'>{statusText}</div>
           </div>
         </div>
-        <HiEllipsisHorizontal
-          size={32}
-          onClick={() => setDrawerOpen(true)}
-          className='
-          text-sky-500
-          cursor-pointer
-          hover:text-sky-600
-          transition
-        '
-        />
+        <div className='flex-none'>
+          <label htmlFor='my-drawer' className='btn btn-circle btn-ghost'>
+            <HiEllipsisHorizontal size={32} />
+          </label>
+        </div>
       </div>
     </>
   );

@@ -3,11 +3,11 @@
 import { User } from '@prisma/client';
 import Image from 'next/image';
 
-interface AvatarGroupProps {
+interface IAvatarGroupProps {
   users?: User[];
 }
 
-const AvatarGroup: React.FC<AvatarGroupProps> = ({ users = [] }) => {
+const AvatarGroup: React.FC<IAvatarGroupProps> = ({ users = [] }) => {
   const slicedUsers = users.slice(0, 3);
 
   const positionMap = {
@@ -32,6 +32,7 @@ const AvatarGroup: React.FC<AvatarGroupProps> = ({ users = [] }) => {
           `}>
           <Image
             fill
+            sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
             src={user?.image || '/images/placeholder.jpg'}
             alt='Avatar'
           />

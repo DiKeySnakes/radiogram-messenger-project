@@ -2,7 +2,7 @@ import { useParams } from 'next/navigation';
 import { useMemo } from 'react';
 
 type ChatData = {
-  isOpen: boolean;
+  chatIsActive: boolean;
   chatId: string;
 };
 
@@ -17,14 +17,14 @@ const useChat = (): ChatData => {
     return params.chatId as string;
   }, [params?.chatId]);
 
-  const isOpen = useMemo(() => !!chatId, [chatId]);
+  const chatIsActive = useMemo(() => !!chatId, [chatId]);
 
   return useMemo(
     () => ({
-      isOpen,
+      chatIsActive,
       chatId,
     }),
-    [isOpen, chatId]
+    [chatIsActive, chatId]
   );
 };
 

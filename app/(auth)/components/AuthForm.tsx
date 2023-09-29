@@ -108,98 +108,91 @@ const AuthForm = () => {
   };
 
   return (
-    <div className='mt-8 sm:mx-auto sm:w-full sm:max-w-md'>
-      <div
+    <div className='sm:mx-auto sm:w-full sm:max-w-md'>
+      <h2
         className='
-        bg-white
-          px-4
-          py-8
-          shadow
-          sm:rounded-lg
-          sm:px-10
-        '>
-        <form className='space-y-6' onSubmit={handleSubmit(onSubmit)}>
-          {action === 'SIGNUP' && (
+            mb-6
+            text-center
+            text-3xl
+            font-bold
+            tracking-tight
+          '>
+        {action === 'LOGIN'
+          ? 'Sign in to your account'
+          : 'Create a new account'}
+      </h2>
+      <div className='card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100'>
+        <div className='card-body'>
+          <form className='space-y-6' onSubmit={handleSubmit(onSubmit)}>
+            {action === 'SIGNUP' && (
+              <Input
+                disabled={isLoading}
+                register={register}
+                errors={errors}
+                required
+                id='name'
+                label='Name'
+              />
+            )}
             <Input
               disabled={isLoading}
               register={register}
               errors={errors}
               required
-              id='name'
-              label='Name'
+              id='email'
+              label='Email address'
+              type='email'
             />
-          )}
-          <Input
-            disabled={isLoading}
-            register={register}
-            errors={errors}
-            required
-            id='email'
-            label='Email address'
-            type='email'
-          />
-          <Input
-            disabled={isLoading}
-            register={register}
-            errors={errors}
-            required
-            id='password'
-            label='Password'
-            type='password'
-          />
-          <div>
-            <Button disabled={isLoading} fullWidth type='submit'>
-              {action === 'LOGIN' ? 'Sign In' : 'Sign Up'}
-            </Button>
-          </div>
-        </form>
-
-        <div className='mt-6'>
-          <div className='relative'>
-            <div
-              className='
-                absolute
-                inset-0
-                flex
-                items-center
-              '>
-              <div className='w-full border-t border-gray-300' />
+            <Input
+              disabled={isLoading}
+              register={register}
+              errors={errors}
+              required
+              id='password'
+              label='Password'
+              type='password'
+            />
+            <div>
+              <Button disabled={isLoading} fullWidth type='submit'>
+                {action === 'LOGIN' ? 'Sign In' : 'Sign Up'}
+              </Button>
             </div>
-            <div className='relative flex justify-center text-sm'>
-              <span className='bg-white px-2 text-gray-500'>
-                Or continue with
-              </span>
+          </form>
+
+          <div className='divider'>Or continue with</div>
+
+          <div className='flex w-full gap-2'>
+            <div className='grid flex-grow place-items-center'>
+              <AuthProviderButton
+                icon={BsGithub}
+                onClick={() => authProvider('github')}
+              />
+            </div>
+            <div className='grid flex-grow place-items-center'>
+              <AuthProviderButton
+                icon={BsGoogle}
+                onClick={() => authProvider('google')}
+              />
             </div>
           </div>
 
-          <div className='mt-6 flex gap-2'>
-            <AuthProviderButton
-              icon={BsGithub}
-              onClick={() => authProvider('github')}
-            />
-            <AuthProviderButton
-              icon={BsGoogle}
-              onClick={() => authProvider('google')}
-            />
-          </div>
-        </div>
-        <div
-          className='
+          <div
+            className='
             flex
             gap-2
             justify-center
             text-sm
-            mt-6
+            mt-5
             px-2
-            text-gray-500
           '>
-          <div>
-            {action === 'LOGIN'
-              ? 'New to Messenger?'
-              : 'Already have an account?'}
-          </div>
-          <div onClick={toggleAction} className='underline cursor-pointer'>
-            {action === 'LOGIN' ? 'Create an account' : 'Login'}
+            <div>
+              {action === 'LOGIN'
+                ? 'New to Messenger?'
+                : 'Already have an account?'}
+            </div>
+            <div onClick={toggleAction} className='underline cursor-pointer'>
+              {action === 'LOGIN' ? 'Create an account' : 'Please login here!'}
+            </div>
           </div>
         </div>
       </div>
