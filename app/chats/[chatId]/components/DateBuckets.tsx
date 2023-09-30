@@ -9,11 +9,29 @@ import MessageBox from './MessageBox';
 import { FullMessageType } from '@/app/types';
 import { find } from 'lodash';
 
-interface IBodyProps {
+interface IDateBucketsProps {
   initialMessages: FullMessageType[];
 }
 
-const Body: React.FC<IBodyProps> = ({ initialMessages = [] }) => {
+const groupMessagesByDate = (
+  messages: FullMessageType[]
+): Record<string, FullMessageType[]> => {
+  const dateBuckets: Record<string, FullMessageType[]> = {};
+
+  for (const message of messages) {
+    const messageDate = new Date(message.createdAt).toDateString();
+
+    if (!dateBuckets[messageDate]) {
+      dateBuckets[messageDate] = [];
+    }
+
+    dateBuckets[messageDate].push(message);
+  }
+
+  return dateBuckets;
+};
+
+const DateBuckets: React.FC<IDateBucketsProps> = ({ initialMessages = [] }) => {
   const bottomRef = useRef<HTMLDivElement>(null);
   const [messages, setMessages] = useState(initialMessages);
 
@@ -63,18 +81,28 @@ const Body: React.FC<IBodyProps> = ({ initialMessages = [] }) => {
     };
   }, [chatId]);
 
+  // Group messages by date
+  const dateBuckets = groupMessagesByDate(messages);
+
   return (
     <div className='flex-1 overflow-y-auto'>
-      {messages.map((message, i) => (
-        <MessageBox
-          isLast={i === messages.length - 1}
-          key={message.id}
-          data={message}
-        />
+      {Object.entries(dateBuckets).map(([date, messagesInDate]) => (
+        <div key={date}>
+          <div className='flex justify-center my-8'>
+            <div className='divider w-10/12'>{date}</div>
+          </div>
+          {messagesInDate.map((message, i) => (
+            <MessageBox
+              isLast={i === messagesInDate.length - 1}
+              key={message.id}
+              data={message}
+            />
+          ))}
+        </div>
       ))}
       <div className='pt-24' ref={bottomRef} />
     </div>
   );
 };
 
-export default Body;
+export default DateBuckets;

@@ -1,9 +1,9 @@
 import getChatById from '@/app/helpers/getChatById';
 import getMessages from '@/app/helpers/getMessages';
 
-import Header from './components/Header';
-import Body from './components/Body';
-import Form from './components/Form';
+import ChatHeader from './components/ChatHeader';
+import DateBuckets from './components/DateBuckets';
+import MessageFactory from './components/MessageFactory';
 import BlankChat from '@/app/components/BlankChat';
 
 interface IParams {
@@ -27,9 +27,9 @@ const ChatId = async ({ params }: { params: IParams }) => {
   return (
     <div className='lg:pl-80 h-full'>
       <div className='h-full flex flex-col'>
-        <Header chat={chat} />
-        <Body initialMessages={messages} />
-        <Form />
+        <ChatHeader chat={chat} />
+        <DateBuckets initialMessages={messages} />
+        <MessageFactory />
       </div>
     </div>
   );

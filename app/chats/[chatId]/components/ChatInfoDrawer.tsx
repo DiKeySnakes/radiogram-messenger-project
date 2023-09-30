@@ -10,15 +10,15 @@ import useActiveList from '@/app/hooks/useActiveList';
 
 import Avatar from '@/app/components/Avatar';
 import AvatarGroup from '@/app/components/AvatarGroup';
-import ConfirmModal from './ConfirmModal';
+import DeleteChatModal from './DeleteChatModal';
 
-interface IProfileDrawerProps {
+interface IChatInfoDrawerProps {
   data: Chat & {
     users: User[];
   };
 }
 
-const ProfileDrawer: React.FC<IProfileDrawerProps> = ({ data }) => {
+const ChatInfoDrawer: React.FC<IChatInfoDrawerProps> = ({ data }) => {
   const chatCompanion = useChatCompanion(data);
 
   const joinedDate = useMemo(() => {
@@ -42,7 +42,7 @@ const ProfileDrawer: React.FC<IProfileDrawerProps> = ({ data }) => {
 
   return (
     <>
-      <ConfirmModal />
+      <DeleteChatModal />
 
       <div className='drawer drawer-end relative z-50'>
         <input id='my-drawer' type='checkbox' className='drawer-toggle' />
@@ -60,14 +60,16 @@ const ProfileDrawer: React.FC<IProfileDrawerProps> = ({ data }) => {
                   <Avatar user={chatCompanion} />
                 )}
               </div>
-              <div>{title}</div>
-              <div className='text-sm text-gray-500'>{statusText}</div>
+              <div className='text-2xl'>{title}</div>
+              <div className='text-sm text-opacity-30'>{statusText}</div>
             </div>
             <div className='flex flex-col my-8 items-center'>
               <button
                 onClick={() =>
                   (
-                    document.getElementById('confirm_modal') as HTMLFormElement
+                    document.getElementById(
+                      'delete_chat_modal'
+                    ) as HTMLFormElement
                   ).showModal()
                 }
                 className='btn btn-wide btn-outline btn-error'>
@@ -119,4 +121,4 @@ const ProfileDrawer: React.FC<IProfileDrawerProps> = ({ data }) => {
   );
 };
 
-export default ProfileDrawer;
+export default ChatInfoDrawer;

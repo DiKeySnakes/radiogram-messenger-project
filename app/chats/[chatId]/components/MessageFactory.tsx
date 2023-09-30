@@ -7,7 +7,7 @@ import axios from 'axios';
 import { CldUploadButton } from 'next-cloudinary';
 import useChat from '@/app/hooks/useChat';
 
-const Form = () => {
+const MessageFactory = () => {
   const { chatId } = useChat();
 
   const {
@@ -76,4 +76,4 @@ const Form = () => {
   );
 };
 
-export default Form;
+export default MessageFactory;

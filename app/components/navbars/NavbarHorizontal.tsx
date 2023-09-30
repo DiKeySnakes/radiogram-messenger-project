@@ -2,7 +2,7 @@
 
 import MenuItemHorizontal from './MenuItemHorizontal';
 import useRoutes from '@/app/hooks/useRoutes';
-import SettingsModal from './SettingsModal';
+import UserProfileModal from './UserProfileModal';
 import useChat from '@/app/hooks/useChat';
 import Avatar from '../Avatar';
 import { User } from '@prisma/client';
@@ -25,13 +25,13 @@ const NavbarHorizontal: React.FC<INavbarHorizontalProps> = ({
 
   return (
     <>
-      <SettingsModal currentUser={currentUser} />
+      <UserProfileModal currentUser={currentUser} />
       <div className='navbarHorizontal'>
         <div className='pt-2 flex flex-col justify-between items-center'>
           <div
             onClick={() =>
               (
-                document.getElementById('settings_modal') as HTMLFormElement
+                document.getElementById('user_profile_modal') as HTMLFormElement
               ).showModal()
             }
             className='cursor-pointer hover:opacity-75 transition'>

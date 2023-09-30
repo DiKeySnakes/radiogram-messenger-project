@@ -11,15 +11,15 @@ import useActiveList from '@/app/hooks/useActiveList';
 
 import Avatar from '@/app/components/Avatar';
 import AvatarGroup from '@/app/components/AvatarGroup';
-import ProfileDrawer from './ProfileDrawer';
+import ChatInfoDrawer from './ChatInfoDrawer';
 
-interface IHeaderProps {
+interface IChatHeaderProps {
   chat: Chat & {
     users: User[];
   };
 }
 
-const Header: React.FC<IHeaderProps> = ({ chat }) => {
+const ChatHeader: React.FC<IChatHeaderProps> = ({ chat }) => {
   const chatCompanion = useChatCompanion(chat);
 
   const { members } = useActiveList();
@@ -34,7 +34,7 @@ const Header: React.FC<IHeaderProps> = ({ chat }) => {
 
   return (
     <>
-      <ProfileDrawer data={chat} />
+      <ChatInfoDrawer data={chat} />
       <div className='navbar bg-base-200 justify-between border-b border-neutral shadow-sm'>
         <div className='flex gap-3 items-center'>
           <Link href='/chats' className='lg:hidden block'>
@@ -62,4 +62,4 @@ const Header: React.FC<IHeaderProps> = ({ chat }) => {
   );
 };
 
-export default Header;
+export default ChatHeader;

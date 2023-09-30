@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import useChat from '@/app/hooks/useChat';
 import { toast } from 'react-hot-toast';
 
-const ConfirmModal: React.FC = () => {
+const DeleteChatModal: React.FC = () => {
   const router = useRouter();
   const { chatId } = useChat();
   const [isLoading, setIsLoading] = useState(false);
@@ -32,7 +32,7 @@ const ConfirmModal: React.FC = () => {
 
   return (
     <>
-      <dialog id='confirm_modal' className='modal'>
+      <dialog id='delete_chat_modal' className='modal'>
         <div className='modal-box'>
           <form method='dialog'>
             {/* if there is a button in form, it will close the modal */}
@@ -77,4 +77,4 @@ const ConfirmModal: React.FC = () => {
   );
 };
 
-export default ConfirmModal;
+export default DeleteChatModal;

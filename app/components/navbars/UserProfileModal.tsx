@@ -12,11 +12,13 @@ import Modal from '../modals/Modal';
 import Image from 'next/image';
 import { toast } from 'react-hot-toast';
 
-interface ISettingsModalProps {
+interface IUserProfileModalProps {
   currentUser: User;
 }
 
-const SettingsModal: React.FC<ISettingsModalProps> = ({ currentUser }) => {
+const UserProfileModal: React.FC<IUserProfileModalProps> = ({
+  currentUser,
+}) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -44,14 +46,14 @@ const SettingsModal: React.FC<ISettingsModalProps> = ({ currentUser }) => {
   };
 
   const closeModal = () => {
-    (document.getElementById('settings_modal') as HTMLFormElement).close();
+    (document.getElementById('user_profile_modal') as HTMLFormElement).close();
   };
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     setIsLoading(true);
 
     axios
-      .post('/api/settings', data)
+      .post('/api/userProfileUpdate', data)
       .then(() => {
         router.refresh();
         closeModal();
@@ -61,7 +63,7 @@ const SettingsModal: React.FC<ISettingsModalProps> = ({ currentUser }) => {
   };
 
   return (
-    <Modal id='settings_modal'>
+    <Modal id='user_profile_modal'>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className='space-y-12'>
           <div className='border-b border-neutral pb-12'>
@@ -129,4 +131,4 @@ const SettingsModal: React.FC<ISettingsModalProps> = ({ currentUser }) => {
   );
 };
 
-export default SettingsModal;
+export default UserProfileModal;

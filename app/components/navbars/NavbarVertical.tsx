@@ -2,7 +2,7 @@
 
 import MenuItemVertical from './MenuItemVertical';
 import useRoutes from '@/app/hooks/useRoutes';
-import SettingsModal from './SettingsModal';
+import UserProfileModal from './UserProfileModal';
 import Avatar from '../Avatar';
 import { User } from '@prisma/client';
 
@@ -17,7 +17,7 @@ const NavbarVertical: React.FC<INavbarVerticalProps> = ({ currentUser }) => {
 
   return (
     <>
-      <SettingsModal currentUser={currentUser} />
+      <UserProfileModal currentUser={currentUser} />
       <div className='navbarVertical'>
         <ul className='menu bg-base-200 rounded-box'>
           {routes.map((item) => (
@@ -36,7 +36,7 @@ const NavbarVertical: React.FC<INavbarVerticalProps> = ({ currentUser }) => {
           <div
             onClick={() =>
               (
-                document.getElementById('settings_modal') as HTMLFormElement
+                document.getElementById('user_profile_modal') as HTMLFormElement
               ).showModal()
             }
             className='cursor-pointer hover:opacity-75 transition'>
