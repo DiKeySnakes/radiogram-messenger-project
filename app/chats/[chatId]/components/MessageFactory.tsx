@@ -3,7 +3,6 @@
 import { HiPaperAirplane, HiPhoto } from 'react-icons/hi2';
 import MessageInput from './MessageInput';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
-import axios from 'axios';
 import { CldUploadButton } from 'next-cloudinary';
 import useChat from '@/app/hooks/useChat';
 
@@ -23,16 +22,29 @@ const MessageFactory = () => {
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     setValue('message', '', { shouldValidate: true });
-    axios.post('/api/messages', {
-      ...data,
-      chatId: chatId,
+
+    fetch('/api/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        ...data,
+        chatId: chatId,
+      }),
     });
   };
 
-  const handleUpload = (result: any) => {
-    axios.post('/api/messages', {
-      image: result.info.secure_url,
-      chatId: chatId,
+  const handleUpload = async (result: any) => {
+    fetch('/api/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        image: result.info.secure_url,
+        chatId: chatId,
+      }),
     });
   };
 

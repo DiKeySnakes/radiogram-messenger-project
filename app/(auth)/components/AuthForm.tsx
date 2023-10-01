@@ -1,12 +1,10 @@
 'use client';
 
-import axios from 'axios';
 import { signIn, useSession } from 'next-auth/react';
 import { useCallback, useEffect, useState } from 'react';
 import { BsGithub, BsGoogle } from 'react-icons/bs';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
-
 import Input from '@/app/components/inputs/Input';
 import AuthProviderButton from './AuthProviderButton';
 import Button from '@/app/components/Button';
@@ -46,65 +44,73 @@ const AuthForm = () => {
     },
   });
 
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     setIsLoading(true);
 
     if (action === 'SIGNUP') {
-      axios
-        .post('/api/signup', data)
-        .then(() =>
-          signIn('credentials', {
+      try {
+        const response = await fetch('/api/signup', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+
+        if (response.ok) {
+          await signIn('credentials', {
             ...data,
             redirect: false,
-          })
-        )
-        .then((callback) => {
-          if (callback?.error) {
-            toast.error('Invalid credentials!');
-          }
-
-          if (callback?.ok) {
-            toast.success('Logged in!');
-            router.push('/chats');
-          }
-        })
-        .catch(() => toast.error('Something went wrong!'))
-        .finally(() => setIsLoading(false));
+          });
+          toast.success('Logged in!');
+          router.push('/chats');
+        } else {
+          toast.error('Invalid credentials!');
+        }
+      } catch (error) {
+        toast.error('Something went wrong!');
+      } finally {
+        setIsLoading(false);
+      }
     }
 
     if (action === 'LOGIN') {
-      signIn('credentials', {
-        ...data,
-        redirect: false,
-      })
-        .then((callback) => {
-          if (callback?.error) {
-            toast.error('Invalid credentials!');
-          }
+      try {
+        const response = await signIn('credentials', {
+          ...data,
+          redirect: false,
+        });
 
-          if (callback?.ok) {
-            router.push('/chats');
-          }
-        })
-        .finally(() => setIsLoading(false));
+        if (response?.ok) {
+          router.push('/chats');
+        } else {
+          toast.error('Invalid credentials!');
+        }
+      } catch (error) {
+        toast.error('Something went wrong!');
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
-  const authProvider = (provider: string) => {
+  const authProvider = async (provider: string) => {
     setIsLoading(true);
 
-    signIn(provider, { redirect: false })
-      .then((callback) => {
-        if (callback?.error) {
-          toast.error('Invalid credentials!');
-        }
+    try {
+      const response = await signIn(provider, { redirect: false });
 
-        if (callback?.ok) {
-          toast.success('Logged in!');
-          router.push('/chats');
-        }
-      })
-      .finally(() => setIsLoading(false));
+      if (response?.ok) {
+        toast.success('Logged in!');
+        router.push('/chats');
+      } else {
+        toast.error('Invalid credentials!');
+      }
+    } catch (error) {
+      toast.error('Something went wrong!');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

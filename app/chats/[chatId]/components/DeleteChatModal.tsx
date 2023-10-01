@@ -2,7 +2,6 @@
 
 import React, { useCallback, useState } from 'react';
 import { FiAlertTriangle } from 'react-icons/fi';
-import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import useChat from '@/app/hooks/useChat';
 import { toast } from 'react-hot-toast';
@@ -13,18 +12,23 @@ const DeleteChatModal: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const closeModal = () => {
-    (document.getElementById('confirm_modal') as HTMLFormElement).close();
+    (document.getElementById('delete_chat_modal') as HTMLDialogElement).close();
   };
 
   const onDelete = useCallback(() => {
     setIsLoading(true);
 
-    axios
-      .delete(`/api/chats/${chatId}`)
-      .then(() => {
-        closeModal();
-        router.push('/chats');
-        router.refresh();
+    fetch(`/api/chats/${chatId}`, {
+      method: 'DELETE',
+    })
+      .then((response) => {
+        if (response.ok) {
+          closeModal();
+          router.push('/chats');
+          router.refresh();
+        } else {
+          toast.error('Something went wrong!');
+        }
       })
       .catch(() => toast.error('Something went wrong!'))
       .finally(() => setIsLoading(false));
@@ -35,12 +39,12 @@ const DeleteChatModal: React.FC = () => {
       <dialog id='delete_chat_modal' className='modal'>
         <div className='modal-box'>
           <form method='dialog'>
-            {/* if there is a button in form, it will close the modal */}
-            <button className='btn btn-sm btn-circle btn-ghost absolute right-2 top-2'>
+            <button
+              className='btn btn-sm btn-circle btn-ghost absolute right-2 top-2'
+              onClick={closeModal}>
               ✕
             </button>
           </form>
-          {/* MODAL BODY HERE */}
           <div className='flex flex-row items-center'>
             <FiAlertTriangle
               className='text-2xl text-warning'

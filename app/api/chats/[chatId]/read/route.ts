@@ -17,7 +17,7 @@ export async function POST(request: Request, { params }: { params: IParams }) {
       return new NextResponse('Unauthorized', { status: 401 });
     }
 
-    // Find existing conversation
+    // Find existing chat
     const chat = await prisma.chat.findUnique({
       where: {
         id: chatId,
@@ -61,7 +61,7 @@ export async function POST(request: Request, { params }: { params: IParams }) {
       },
     });
 
-    // Update all connections with new seen
+    // Update all chats with new read status
     await pusherServer.trigger(currentUser.email, 'chat:update', {
       id: chatId,
       messages: [updatedMessage],

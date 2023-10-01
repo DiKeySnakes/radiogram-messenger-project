@@ -8,8 +8,7 @@ export default async function ChatsLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const chats = await getChats();
-  const users = await getUsers();
+  const [chats, users] = await Promise.all([getChats(), getUsers()]);
 
   return (
     <Navbar>

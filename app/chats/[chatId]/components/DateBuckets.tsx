@@ -1,6 +1,5 @@
 'use client';
 
-import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 
 import { pusherClient } from '@/app/libs/pusher';
@@ -38,7 +37,9 @@ const DateBuckets: React.FC<IDateBucketsProps> = ({ initialMessages = [] }) => {
   const { chatId } = useChat();
 
   useEffect(() => {
-    axios.post(`/api/chats/${chatId}/read`);
+    fetch(`/api/chats/${chatId}/read`, {
+      method: 'POST',
+    });
   }, [chatId]);
 
   useEffect(() => {
@@ -46,7 +47,9 @@ const DateBuckets: React.FC<IDateBucketsProps> = ({ initialMessages = [] }) => {
     bottomRef?.current?.scrollIntoView();
 
     const messageHandler = (message: FullMessageType) => {
-      axios.post(`/api/chats/${chatId}/read`);
+      fetch(`/api/chats/${chatId}/read`, {
+        method: 'POST',
+      });
 
       setMessages((current) => {
         if (find(current, { id: message.id })) {

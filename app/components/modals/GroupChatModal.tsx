@@ -1,6 +1,5 @@
 'use client';
 
-import axios from 'axios';
 import React, { useState } from 'react';
 import { HiUserGroup } from 'react-icons/hi2';
 import { useRouter } from 'next/navigation';
@@ -39,20 +38,32 @@ const GroupChatModal: React.FC<IGroupChatModalProps> = ({ users = [] }) => {
     (document.getElementById('group_chat_modal') as HTMLFormElement).close();
   };
 
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     setIsLoading(true);
 
-    axios
-      .post('/api/chats', {
-        ...data,
-        isGroup: true,
-      })
-      .then(() => {
+    try {
+      const response = await fetch('/api/chats', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...data,
+          isGroup: true,
+        }),
+      });
+
+      if (response.ok) {
         router.refresh();
         closeModal();
-      })
-      .catch(() => toast.error('Something went wrong!'))
-      .finally(() => setIsLoading(false));
+      } else {
+        toast.error('Something went wrong!');
+      }
+    } catch (error) {
+      toast.error('Something went wrong!');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

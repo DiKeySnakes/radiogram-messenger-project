@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { useCallback, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { User } from '@prisma/client';
@@ -13,15 +12,31 @@ const UserBox: React.FC<IUserBoxProps> = ({ data }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleClick = useCallback(() => {
+  const handleClick = useCallback(async () => {
     setIsLoading(true);
 
-    axios
-      .post('/api/chats', { userId: data.id })
-      .then((data) => {
-        router.push(`/chats/${data.data.id}`);
-      })
-      .finally(() => setIsLoading(false));
+    try {
+      const response = await fetch('/api/chats', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId: data.id }),
+      });
+
+      if (response.ok) {
+        const responseData = await response.json();
+        router.push(`/chats/${responseData.id}`);
+      } else {
+        // Handle the error here
+        console.error('Failed to create chat:', response.status);
+      }
+    } catch (error) {
+      // Handle any network or other errors here
+      console.error('Error creating chat:', error);
+    } finally {
+      setIsLoading(false);
+    }
   }, [data, router]);
 
   return (

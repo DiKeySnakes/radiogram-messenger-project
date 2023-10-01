@@ -1,12 +1,10 @@
 'use client';
 
-import axios from 'axios';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { User } from '@prisma/client';
 import { CldUploadButton } from 'next-cloudinary';
-
 import Input from '../inputs/Input';
 import Modal from '../modals/Modal';
 import Image from 'next/image';
@@ -52,11 +50,20 @@ const UserProfileModal: React.FC<IUserProfileModalProps> = ({
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     setIsLoading(true);
 
-    axios
-      .post('/api/userProfileUpdate', data)
-      .then(() => {
-        router.refresh();
-        closeModal();
+    fetch('/api/userProfileUpdate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => {
+        if (response.ok) {
+          router.refresh();
+          closeModal();
+        } else {
+          throw new Error('Something went wrong!');
+        }
       })
       .catch(() => toast.error('Something went wrong!'))
       .finally(() => setIsLoading(false));
