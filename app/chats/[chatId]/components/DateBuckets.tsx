@@ -94,12 +94,8 @@ const DateBuckets: React.FC<IDateBucketsProps> = ({ initialMessages = [] }) => {
           <div className='flex justify-center my-8'>
             <div className='divider w-10/12'>{date}</div>
           </div>
-          {messagesInDate.map((message, i) => (
-            <MessageBox
-              isLast={i === messagesInDate.length - 1}
-              key={message.id}
-              data={message}
-            />
+          {messagesInDate.map((message) => (
+            <MessageBox key={message.id} data={message} />
           ))}
         </div>
       ))}

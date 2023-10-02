@@ -13,10 +13,9 @@ import { BsCheckAll } from 'react-icons/bs';
 
 interface IMessageBoxProps {
   data: FullMessageType;
-  isLast?: boolean;
 }
 
-const MessageBox: React.FC<IMessageBoxProps> = ({ data, isLast }) => {
+const MessageBox: React.FC<IMessageBoxProps> = ({ data }) => {
   const session = useSession();
 
   const isOwn = session.data?.user?.email === data?.sender?.email;
@@ -34,7 +33,7 @@ const MessageBox: React.FC<IMessageBoxProps> = ({ data, isLast }) => {
         {data.sender.name}
         <time className='text-xs opacity-50'>
           {' '}
-          {format(new Date(data.createdAt), 'p')}
+          {format(new Date(data.createdAt), 'HH:mm')}
         </time>
       </div>
       <div
@@ -62,7 +61,7 @@ const MessageBox: React.FC<IMessageBoxProps> = ({ data, isLast }) => {
           <div>{data.body}</div>
         )}
       </div>
-      {isLast && isOwn && readList.length > 0 && (
+      {isOwn && readList.length > 0 && (
         <div className='chat-footer opacity-50'>
           <div className='flex flex-row items-center'>
             {`Read by ${readList}`}
@@ -70,11 +69,6 @@ const MessageBox: React.FC<IMessageBoxProps> = ({ data, isLast }) => {
               <BsCheckAll />
             </span>
           </div>
-        </div>
-      )}
-      {!isLast && isOwn && readList.length > 0 && (
-        <div className='chat-footer opacity-70 text-2xl text-success'>
-          <BsCheckAll />
         </div>
       )}
     </div>
