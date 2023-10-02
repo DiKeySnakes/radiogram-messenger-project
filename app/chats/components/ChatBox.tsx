@@ -97,7 +97,7 @@ const ChatBox: React.FC<IChatBoxProps> = ({ data, selected }) => {
             </p>
             {lastMessage?.createdAt && (
               <p className='text-xs font-light'>
-                {format(new Date(lastMessage.createdAt), 'p')}
+                {format(new Date(lastMessage.createdAt), 'HH:mm')}
               </p>
             )}
           </div>
