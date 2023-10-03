@@ -12,6 +12,8 @@ import Avatar from '@/app/components/Avatar';
 import AvatarGroup from '@/app/components/AvatarGroup';
 import DeleteChatModal from './DeleteChatModal';
 
+import { RiArchiveDrawerFill } from 'react-icons/ri';
+
 interface IChatInfoDrawerProps {
   data: Chat & {
     users: User[];
@@ -113,6 +115,13 @@ const ChatInfoDrawer: React.FC<IChatInfoDrawerProps> = ({ data }) => {
                   </>
                 )}
               </dl>
+            </div>
+            <div className='flex justify-center fixed bottom-8 left-[45%]'>
+              <label
+                htmlFor='my-drawer'
+                className='btn btn-circle btn-ghost border border-base-300 shadow-lg'>
+                <RiArchiveDrawerFill size={32} />
+              </label>
             </div>
           </div>
         </div>

@@ -27,7 +27,7 @@ const MenuItemHorizontal: React.FC<IMenuItemProps> = ({
       <Link
         href={href}
         data-tip={label}
-        className={clsx('tooltip', active && 'bg-neutral')}>
+        className={clsx('tooltip', active && 'bg-base-300 shadow-lg')}>
         <Icon className='w-8 h-8' aria-hidden='true' />
       </Link>
     </li>

@@ -35,7 +35,7 @@ const ChatHeader: React.FC<IChatHeaderProps> = ({ chat }) => {
   return (
     <>
       <ChatInfoDrawer data={chat} />
-      <div className='navbar bg-base-200 justify-between border-b border-neutral shadow-sm'>
+      <div className='navbar bg-base-200 justify-between border-b border-base-300 shadow-lg'>
         <div className='flex gap-3 items-center'>
           <Link href='/chats' className='lg:hidden block'>
             <button className='btn btn-circle btn-ghost'>

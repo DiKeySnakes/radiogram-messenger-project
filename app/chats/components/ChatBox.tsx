@@ -74,14 +74,14 @@ const ChatBox: React.FC<IChatBoxProps> = ({ data, selected }) => {
         space-x-3
         p-3
         mb-2
-        hover:bg-neutral
+        hover:bg-base-300
         rounded-lg
         transition
         cursor-pointer
         `,
         selected
-          ? 'bg-base-200 border border-neutral'
-          : 'bg-base-100 border border-neutral'
+          ? 'bg-base-200 border border-base-300 shadow-lg'
+          : 'bg-base-100 border border-base-300'
       )}>
       {data.isGroup ? (
         <AvatarGroup users={data.users} />

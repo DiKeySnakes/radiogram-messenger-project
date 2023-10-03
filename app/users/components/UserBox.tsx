@@ -50,10 +50,13 @@ const UserBox: React.FC<IUserBoxProps> = ({ data }) => {
           items-center
           space-x-3
           p-3
-          hover:bg-neutral
+          mb-2
+          hover:bg-base-300
           rounded-lg
           transition
           cursor-pointer
+          border
+          border-base-300
         '>
         <Avatar user={data} />
         <div className='min-w-0 flex-1'>

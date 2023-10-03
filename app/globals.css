@@ -16,7 +16,7 @@
    justify-between
    bg-base-200
    border-r
-   border-neutral;
+   border-base-300;
   }
   .navbarHorizontal {
     @apply h-20
@@ -31,7 +31,7 @@
     px-4
     bg-base-200
     border-t
-    border-neutral;
+    border-base-300;
   }
 }
 

@@ -91,7 +91,7 @@ const ChatList: React.FC<IChatListProps> = ({ initialItems, users }) => {
           lg:block
           overflow-y-auto
           border-r
-          border-neutral
+          border-base-300
           `,
           chatIsActive ? 'hidden' : 'block w-full left-0'
         )}>
@@ -99,7 +99,7 @@ const ChatList: React.FC<IChatListProps> = ({ initialItems, users }) => {
           <div className='flex justify-between items-center mb-4 pt-4'>
             <div className='text-3xl font-bold'>Chats</div>
             <button
-              className='btn btn-circle btn-ghost border-neutral'
+              className='btn btn-circle btn-ghost border-base-300'
               onClick={() =>
                 (
                   document.getElementById('group_chat_modal') as HTMLFormElement

@@ -22,7 +22,7 @@ const UserList: React.FC<IUserListProps> = ({ items }) => {
         overflow-y-auto
         block w-full left-0
         border-r
-        border-neutral
+        border-base-300
       '>
       <div className='px-5'>
         <div className='flex-col'>

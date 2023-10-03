@@ -54,7 +54,7 @@ const MessageFactory = () => {
         py-4
         px-4
         border-t
-        border-neutral
+        border-base-300
         flex
         items-center
         gap-2
@@ -65,7 +65,7 @@ const MessageFactory = () => {
         options={{ maxFiles: 1 }}
         onUpload={handleUpload}
         uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_PRESET}
-        className='btn btn-circle btn-ghost border-neutral'>
+        className='btn btn-circle btn-ghost border-base-300'>
         <HiPhoto size={30} />
       </CldUploadButton>
       <form
@@ -80,7 +80,7 @@ const MessageFactory = () => {
         />
         <button
           type='submit'
-          className='btn btn-circle btn-ghost border-neutral'>
+          className='btn btn-circle btn-ghost border-base-300'>
           <HiPaperAirplane size={24} />
         </button>
       </form>

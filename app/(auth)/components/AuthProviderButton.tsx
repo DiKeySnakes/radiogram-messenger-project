@@ -13,7 +13,7 @@ const AuthProviderButton: React.FC<AuthProviderButtonProps> = ({
     <button
       type='button'
       onClick={onClick}
-      className='btn btn-neutral btn-block'>
+      className='btn bg-base-200 border border-base-300 btn-block'>
       <Icon size={24} />
     </button>
   );
